@@ -3,6 +3,7 @@ package io.saud.investify.installpackage.packagemanager;
 import io.saud.investify.installpackage.common.PackageException;
 import io.saud.investify.installpackage.file.PackageFileParserImpl;
 import io.saud.investify.installpackage.file.PackageFileProcessor;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,19 +42,45 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
-    public void install(String packageName) {
-        if (allAvailablePackages.contains(packageName)) {
-            installPackages.add(packageName);
-            installPackages.addAll(parsedPackages.get(packageName));
-        }
+    public void install(String packageName) throws PackageException {
+        if (checkIfPackageIsAvailable(packageName)) {
 
-        installPackages.forEach(System.out::println);
+            if (installPackages.containsAll(parsedPackages.get(packageName))) {
+                installPackages.add(packageName);
+            } else {
+                throw new PackageException(packageName + " cannot be add because you need to install " + parsedPackages.get(packageName).toString() + " first");
+            }
+
+        } else {
+            throw new PackageException("Package name " + packageName + " is not found in our Package Repository");
+        }
 
     }
 
     @Override
-    public void remove(String packageName) {
-//        packageFileProcessor.
+    public void remove(String packageName) throws PackageException {
+        installPackages.forEach(System.out::println);
+        if (installPackages.contains(packageName)) {
+
+
+            Map<String,List<String>>
+                    tempPackages = parsedPackages
+                    .entrySet()
+                    .stream()
+                    .filter(i-> i.getValue().contains(packageName) && installPackages.contains(i.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+
+
+            if (tempPackages.size() == 0) {
+                installPackages.remove(packageName);
+            } else {
+                throw new PackageException(packageName + " cannot be removed because installed package " + tempPackages.keySet().toString() + " depends on it");
+            }
+
+
+        } else {
+            throw new PackageException("Package Not Found");
+        }
     }
 
     @Override
@@ -70,6 +97,15 @@ public class PackageServiceImpl implements PackageService {
             tempAvailablePackages.add(key);
             tempAvailablePackages.addAll(val.stream().distinct().collect(Collectors.toList()));
         });
-        this.allAvailablePackages = tempAvailablePackages.stream().collect(Collectors.toList());
+        this.allAvailablePackages = new ArrayList<>(tempAvailablePackages);
+    }
+
+    private boolean checkIfPackageIsAvailable(String packageName){
+        return allAvailablePackages.contains(packageName);
+    }
+
+
+    private String removeExceptionMessageBuilder(Map<String,List<String>> dependenciesPackages){
+        return null;
     }
 }

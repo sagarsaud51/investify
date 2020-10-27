@@ -34,7 +34,7 @@ public class PackageFileParserImpl implements PackageFileProcessor {
         Map<String, List<String>> tempPackages = new HashMap<>();
         packages.forEach(p -> {
             String[] packageDetails = splitStrings(p, PACKAGE_NAME_SPLITTER);
-            tempPackages.put(packageDetails[0], packageDetails.length > 1 ? Arrays.asList(splitStrings(packageDetails[1], DEPENDENCIES_PACKAGE_NAME_SPLITTER)) : Collections.singletonList(""));
+            tempPackages.put(packageDetails[0], packageDetails.length > 1 ? Arrays.asList(splitStrings(packageDetails[1], DEPENDENCIES_PACKAGE_NAME_SPLITTER)) : Collections.EMPTY_LIST);
 
         });
         return tempPackages;
