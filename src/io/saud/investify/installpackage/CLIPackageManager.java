@@ -89,16 +89,21 @@ public class CLIPackageManager {
     }
 
     void initiateRepository() {
-        System.out.print(ConsoleColors.BLUE_BOLD);
-        System.out.println("Please Enter absolute path of package text file");
-        resetConsoleColor();
-        System.out.println(ConsoleColors.RED_BOLD_BRIGHT + "Leave blank if you want to use default package.txt file");
-        resetConsoleColor();
-        String fileLocation = readInput();
-        if (!fileLocation.isEmpty()) {
-            packageService = new PackageServiceImpl(fileLocation);
-        } else {
-            packageService = new PackageServiceImpl("package.txt");
+        try {
+            resetConsoleColor();
+            System.out.print(ConsoleColors.BLUE_BOLD);
+            System.out.println("Please Enter absolute path of package text file");
+            resetConsoleColor();
+            System.out.println(ConsoleColors.RED_BOLD_BRIGHT + "Leave blank if you want to use default package.txt file");
+            resetConsoleColor();
+            String fileLocation = readInput();
+            if (!fileLocation.isEmpty()) {
+                packageService = new PackageServiceImpl(fileLocation);
+            } else {
+                packageService = new PackageServiceImpl("package.txt");
+            }
+        }catch (Exception e){
+            PackageLogger.err(e.getMessage());
         }
     }
 

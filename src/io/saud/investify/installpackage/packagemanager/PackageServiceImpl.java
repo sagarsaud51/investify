@@ -21,22 +21,20 @@ public class PackageServiceImpl implements PackageService {
     private final Set<String> installedPackages = new HashSet<>();
 
 
-    public PackageServiceImpl(String fileName) {
+    public PackageServiceImpl(String fileName) throws Exception{
         this.init(fileName);
     }
 
-    public void init(String fileName) {
-        try {
-            List<String> packages = packageFileProcessor.readFile(fileName);
-            if (packageFileProcessor.validateFile(packages)) {
-                parsedPackages = packageFileProcessor.parsePackages(packages);
-            } else {
-                throw new PackageException("Oops there is an issue with data parsing with file " + fileName);
-            }
-            storeAllAvailablePackages();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void init(String fileName) throws Exception {
+
+        List<String> packages = packageFileProcessor.readFile(fileName);
+        if (packageFileProcessor.validateFile(packages)) {
+            parsedPackages = packageFileProcessor.parsePackages(packages);
+        } else {
+            throw new PackageException("Oops there is an issue with data parsing with file " + fileName);
         }
+        storeAllAvailablePackages();
+
     }
 
     @Override
