@@ -10,12 +10,12 @@ import java.util.Map;
  */
 public interface PackageFileProcessor {
 
-    void readFile(String fileName) throws IOException;
+    List<String> readFile(String fileName) throws IOException;
 
-    Map<String, List<String>> parsePackages();
+    Map<String, List<String>> parsePackages(List<String> fileLines);
 
-    boolean validateFile() throws Exception;
+    boolean validateFile(List<String> packages);
 
-    void clearPackages();
+
 
 }

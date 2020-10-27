@@ -19,27 +19,21 @@ public class PackageFileParserImpl implements PackageFileProcessor {
     private static final String PACKAGE_NAME_SPLITTER = ":";
     private static final String DEPENDENCIES_PACKAGE_NAME_SPLITTER = ",";
 
-    private File file;
-    public final List<String> packages = new ArrayList<>();
-    public Map<String, List<String>> parsedPackages = new HashMap<>();
-
 
     @Override
-    public void readFile(String fileName) throws IOException {
-
-        this.file = new File(fileName);
+    public List<String> readFile(String fileName) throws IOException {
+        File file = new File(fileName);
+        List<String> listOfLinesOfFiles = new ArrayList<>();
         Stream<String> lines = Files.lines(file.toPath());
-        lines.forEach(packages::add);
-
+        lines.forEach(listOfLinesOfFiles::add);
+        return listOfLinesOfFiles;
     }
 
     @Override
-    public Map<String, List<String>> parsePackages() {
+    public Map<String, List<String>> parsePackages(List<String> packages) {
         Map<String, List<String>> tempPackages = new HashMap<>();
         packages.forEach(p -> {
             String[] packageDetails = splitStrings(p, PACKAGE_NAME_SPLITTER);
-
-
             tempPackages.put(packageDetails[0], packageDetails.length > 1 ? Arrays.asList(splitStrings(packageDetails[1], DEPENDENCIES_PACKAGE_NAME_SPLITTER)) : Collections.singletonList(""));
 
         });
@@ -48,20 +42,16 @@ public class PackageFileParserImpl implements PackageFileProcessor {
 
 
     @Override
-    public boolean validateFile() {
+    public boolean validateFile(List<String> packages) {
         for (int i = 0; i < packages.size(); i++) {
             if (!packages.get(i).contains(":")) {
-                LOGGER.severe("Package File " + file.getName() + " is Not Valid at line " + i);
+                LOGGER.severe("Package File is Not Valid at line " + i);
                 return false;
             }
         }
         return true;
     }
 
-    @Override
-    public void clearPackages() {
-        parsedPackages.clear();
-    }
 
     private String[] splitStrings(String mainString, String splitter) {
         return mainString.split(Pattern.quote(splitter));
