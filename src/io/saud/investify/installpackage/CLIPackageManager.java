@@ -17,16 +17,13 @@ public class CLIPackageManager {
     public static void main(String[] args) throws Exception {
         PackageService packageService = new PackageServiceImpl("package.txt");
         packageService.install("E");
-        packageService.install("D");
-        packageService.install("C");
-        packageService.install("B");
-        packageService.install("A");
 
-        try{
-            packageService.remove("C");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        packageService.install("B");
+
+
+
+        System.out.println(packageService.list("installed"));
+        System.out.println(packageService.list("all"));
     }
 
 }
