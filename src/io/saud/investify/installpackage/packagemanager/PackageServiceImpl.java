@@ -1,7 +1,7 @@
 package io.saud.investify.installpackage.packagemanager;
 
-import com.sun.source.tree.BreakTree;
 import io.saud.investify.installpackage.common.PackageException;
+import io.saud.investify.installpackage.common.PackageManagerConstants;
 import io.saud.investify.installpackage.file.PackageFileParserImpl;
 import io.saud.investify.installpackage.file.PackageFileProcessor;
 
@@ -74,12 +74,13 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
-    public List<String> list(String args) {
-        if (args.equalsIgnoreCase("installed")) {
+    public List<String> list(String args) throws PackageException {
+        if (args.equalsIgnoreCase(PackageManagerConstants.LIST_INSTALLED_ARGS)) {
             return new ArrayList<>(installedPackages);
-
-        }
-        return allAvailablePackages;
+        } else if (args.equalsIgnoreCase(PackageManagerConstants.LIST_ALL_ARGS) || args.isBlank())
+            return allAvailablePackages;
+        else
+            throw new PackageException("Illegal Argument!  Argument " + args + " is not found");
     }
 
 

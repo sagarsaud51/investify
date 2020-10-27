@@ -6,10 +6,12 @@ package io.saud.investify.installpackage.common;
  */
 public class PackageManagerConstants {
 
-    public static final String LIST_INSTALLED_ARGS = "installed";
-    public static final String LIST_ALL_ARGS = "all";
+    private PackageManagerConstants() {
+    }
 
-    public static final String INSTALL = "install";
-    public static final String REMOVE = "remove";
+    public static final String LIST_INSTALLED_ARGS = "-installed";
+    public static final String LIST_ALL_ARGS = "-all";
+
+
 
 }

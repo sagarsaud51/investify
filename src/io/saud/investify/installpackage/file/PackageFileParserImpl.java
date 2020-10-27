@@ -22,6 +22,7 @@ public class PackageFileParserImpl implements PackageFileProcessor {
 
     @Override
     public List<String> readFile(String fileName) throws IOException {
+        LOGGER.info("INITIALIZING " + fileName);
         File file = new File(fileName);
         List<String> listOfLinesOfFiles = new ArrayList<>();
         Stream<String> lines = Files.lines(file.toPath());

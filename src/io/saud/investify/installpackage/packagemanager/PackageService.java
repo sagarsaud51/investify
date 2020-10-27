@@ -14,6 +14,6 @@ public interface  PackageService {
 
     void remove(String packageName) throws PackageException;
 
-    List<String> list(String args);
+    List<String> list(String args) throws PackageException;
 
 }
